@@ -5,15 +5,15 @@ NotifyHub to system przekazywania powiadomień, który umożliwia komunikację m
 
 ## Zawartość projektu
 Projekt składa się z trzech głównych komponentów:
-1. **Producent (Producer)**  
+1. **Producent (Producer inf52024_160269_p.c)**  
    - Generuje powiadomienia, takie jak alerty lub aktualizacje.  
    - Wysyła powiadomienia do dyspozytora.
 
-2. **Dyspozytor (Dispatcher)**  
+2. **Dyspozytor (Dispatcher inf52024_160269_d.c)**  
    - Zarządza subskrypcjami klientów.  
    - Przekazuje powiadomienia od producentów do odpowiednich klientów.  
 
-3. **Klient (Client)**  
+3. **Klient (Client: inf52024_160269_k.c)**  
    - Subskrybuje określone typy powiadomień.  
    - Otrzymuje i wyświetla powiadomienia przesyłane przez dyspozytora.  
 
