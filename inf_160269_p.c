@@ -33,6 +33,7 @@ int initial_connection_to_dist(int id){
 
     msgsnd(id, &msg,  sizeof(msg) - sizeof(long), 0); //wysłanie zapytania czy mg nadawać takie informację i sprawdzenie czy id nie jest już zajęte
     struct producent_distributor_feedback feedback;
+    printf("Waiting for feedback, request sended\n"); //debug
     msgrcv(id, &feedback, sizeof(feedback) - sizeof(long), PRODUCENT_DISTRIBUTOR_FEEDBACK, 0);
 
     if(feedback.status == 0){
@@ -55,7 +56,6 @@ int initial_connection_to_dist(int id){
 
 int main(){
     int queue_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
-    
     int initial_info_type;
     int my_id;
 
@@ -72,8 +72,8 @@ int main(){
         else
         msg.info_type[i]  = 0;
     }
-
-    scanf("podaj pod jakie chcesz mieć id: %d", &my_id);
+    printf("Podaj pod jakie chcesz mieć id: \n");  
+    scanf("%d", &my_id);
     msg.id_producent = my_id;
 
 

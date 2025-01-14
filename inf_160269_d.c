@@ -20,11 +20,7 @@ DEBATA 9
 
 #define INITIAL_COMUNICATION_KEY 123456
 
-struct init_info prod_info;
 struct init_msg msg;
-
-
-
 int chanel_in_use[10] = {0}; // 0 dla wolnego,  id_producenta dla zajetego
 
 
@@ -36,38 +32,55 @@ int is_chanel_free(int chanel){
     return 0;
 }
 
+int is_id_free(int id){
+    for(int i = 0; i<10; i++){
+        if(chanel_in_use[i] == id){
+            return 0;
+        }
+    }
+    return 1;
+}
 
 
 void init_comunicatnion(int init_queue_id){
     
     struct init_msg msg;
-    if (msgrcv(init_queue_id, &msg, sizeof(msg) - sizeof(long), INITIAL_CHANEL, IPC_NOWAIT)>0)
-    {   
-    //printf("kanał którym ma byc nadawane: %d\n", prod_info.pro_id);
-    //printf("Typ nadawanych wiadomości: %d\n", prod_info.info_type[0]);
-    if(chanel_in_use[msg.info_type[0]] == 0 and ){
-        chanel_in_use[msg.info_type[0]] = msg.id_producent;
-        //printf("Kanał %d zajęty przez producenta %d\n", prod_info.info_type[0], prod_info.pro_id);
+    struct producent_distributor_feedback feedback;
+    if (msgrcv(init_queue_id, &msg, sizeof(msg) - sizeof(long), INITIAL_CHANEL, 0)>0)
+    { 
+        printf("Otrzymano wiadomość, wysylanie feedback\n");  
 
-    
-    
+        //printf("kanał którym ma byc nadawane: %d\n", prod_info.pro_id);
+        //printf("Typ nadawanych wiadomości: %d\n", prod_info.info_type[0]);
+        if (is_id_free(msg.id_producent))
+        {
+            printf("Id jest wolne\n");
+            if(is_chanel_free(msg.info_type[0]))
+            {
+                printf("Kanał jest wolny\n");
+                chanel_in_use[msg.info_type[0]] = msg.id_producent;
+                feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
+                feedback.status = 0;
+                msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
+                printf("Wysłano feedback\n");
+            }
+            else
+            {
+                printf("Kanał jest zajęty\n");
+            }
 
+        }
+        else
+        {
+            printf("Id jest zajęte\n");
+        }
     }
 }
 int main(){
     int id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
 
-    struct init_msg msg;
-    msgrcv(id, &msg, sizeof(msg) - sizeof(long), INI, 0);
-    
-    printf("kanał którym ma byc nadawane: %d\n", prod_info.pro_id);
-    printf("Typ nadawanych wiadomości: %d\n", prod_info.info_type[0]);
-
-    while (1)
-    {
-        ;
-    }
-    
-
-
+    //while (1)
+    //{
+        init_comunicatnion(id);
+    //}
 }
