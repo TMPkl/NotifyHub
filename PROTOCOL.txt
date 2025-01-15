@@ -1,0 +1,5 @@
+KOMUNIKACJA PRODUCENT - DYSRBUTOR: 
+
+	-inicjalizacja: inicjalizacja odbywa się poprzez wysłanie przez producenta zapytania o dostępność kanału w jakim dystrybutor chce nadawać oraz proponowanego swojego id_producenta. W odpowiedzi dostaje feedback w którym w zależnośći od statusu:
+		status -1 - kanał jest już nadawany przez inego producenta
+		status 0  - kanał i id_producenta jest wolne, zostało pomyśle przypisane do producenta zgodnie z zapytaniem 
