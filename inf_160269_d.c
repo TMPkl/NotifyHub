@@ -34,6 +34,14 @@ bool is_chanel_free(int chanel){
     return false;
 }
 
+void add_producent(int id){
+    for(int i = 0; i<10; i++){
+        if(!producents_connected_id[i]){
+            producents_connected_id[i] = id;
+            return;
+        }
+    }
+}
 
 
 bool is_id_free(int id){
@@ -71,7 +79,7 @@ void init_comunicatnion(int init_queue_id){
             {
                                                                     printf("Kanał i id jest wolne  ");
                 chanel_in_use[msg.info_type[0]] = msg.id_producent;
-                producents_connected_id[msg.id_producent] = true;
+                add_producent(msg.id_producent);
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                 feedback.status = 0;
                 msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
@@ -94,6 +102,9 @@ void init_comunicatnion(int init_queue_id){
                                                                     printf("Id jest zajęte\n");
             feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
             feedback.status = find_free_id();
+            chanel_in_use[msg.info_type[0]] = feedback.status;
+            add_producent(feedback.status);
+            
             msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
                                                                     printf("Wysłano feedback\n");
             
