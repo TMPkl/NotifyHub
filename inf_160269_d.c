@@ -6,16 +6,16 @@
 #include "myStructs.h"
 #include <stdbool.h>
 /*
-ROZRYWKA 0
-SPORT 1
-SWIAT 2
-POLITYKA 3
-KONFLITKY 4
+ROZRYWKA 0  na kalanł 1
+SPORT 1 na kanał 2
+SWIAT 2 na kanał 3
+POLITYKA 3 na kanał 4
+KONFLITKY 4 ... 5
 ODKRYCIA 5
 POGODA 6
 WYWIADY 7
 GIELDA 8
-DEBATA 9
+DEBATA 9 na kanał 10
 
 */
 
@@ -114,11 +114,11 @@ int main(){
         strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
 
         init_comunicatnion(id);
-        for(int i = 0; i<9; i++){
+        for(int i = 1; i<11; i++){
             if(chanel_in_use[i])
             {
-                msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
-                if(news_to_broadcast.type == i+1)
+                msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i, IPC_NOWAIT);
+                if(news_to_broadcast.type == i)
                 {
                     printf("Otrzymano wiadomość do przekierowania: %s od %d\n", news_to_broadcast.news_content, i);
                 }

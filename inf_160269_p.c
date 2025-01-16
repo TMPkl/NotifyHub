@@ -56,12 +56,12 @@ int initial_connection_to_dist(int id){
 
 void choose_news_type(struct init_msg *msg){
     printf("Choose news type: \n");
-    for(int i = 0; i<9; i++){
+    for(int i = 0; i<10; i++){
         printf("%d. %s\n", i+1, types_of_info[i]);
     }
     int type;
     scanf("%d", &type);
-    msg->info_type[0] = type;
+    msg->info_type[0] = type+1;
     return;
 }
 

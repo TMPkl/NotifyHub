@@ -25,6 +25,7 @@ struct producent_distributor_feedback{
 };
 
 static char* types_of_info[]={
+    "ROZRYWKA" 0
     "SPORT" , //1
     "SWIAT" , //2
     "POLITYKA" , //3
