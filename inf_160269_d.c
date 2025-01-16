@@ -108,12 +108,12 @@ int main(){
     {   
         struct news news_to_broadcast;
         news_to_broadcast.type = 0;
-        news_to_broadcast.news_content[0] = '\0';
+        strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
         init_comunicatnion(id);
-        for(int i = 0; i<10; i++){
+        for(int i = 0; i<9; i++){
             if(chanel_in_use[i])
             {
-                msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i, IPC_NOWAIT);
+                msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
                 if(news_to_broadcast.type == i)
                 {
                     printf("Otrzymano wiadomość do przekierowania: %s od %d\n", news_to_broadcast.news_content, i);
