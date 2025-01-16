@@ -51,45 +51,68 @@ int initial_connection_to_dist(int id){
     }
 
 
-    return id;
+    return feedback.status;
 }
+
+void choose_news_type(struct init_msg *msg){
+    printf("Choose news type: \n");
+    for(int i = 0; i<10; i++){
+        printf("%d. %s\n", i, types_of_info[i]);
+    }
+    int type;
+    scanf("%d", &type);
+    msg->info_type[0] = type;
+    return;
+}
+
+
 
 int main(){
     int queue_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
     int initial_info_type;
     int my_id;
 
+    choose_news_type(&msg);
 
-    printf("Podaj jakie informację będziesz nadawać: \n");
-    for(int i=0; i<10; i++){
-        printf("wybierz %d dla:  %s \n",i, types_of_info[i]);     
-    }
-
-    scanf("%d", &initial_info_type);
-    for(int i = 0 ; i <5; i++)
-    {   if(i == 0)
-        msg.info_type[i] = initial_info_type;
-        else
-        msg.info_type[i]  = 0;
-    }
     printf("Podaj pod jakie chcesz mieć id: \n");  
     scanf("%d", &my_id);
     msg.id_producent = my_id;
 
+    int connection_status = initial_connection_to_dist(queue_id);
+    
+    while (1)
+    {   
+        switch (connection_status)
+        {
+        case 0: //połączenie zostało nawiązane, można nadawać informacje
+        {
+            struct news news_to_broadcast;
+            news_to_broadcast.type = msg.info_type[0];
+            strcpy(news_to_broadcast.news_content,"Hello");
+            msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
+            printf("Wiadomość nadana kanałem %d\n", msg.info_type[0]);   
 
+            return 0; //debug
 
-    initial_connection_to_dist(queue_id);
+            break;
+        }
+        case -1: //nie można nadawać tego typu informacji
+        {
+            printf("Somebody already broadcasts this type of informaton.\n");
+            choose_news_type(&msg);
+            connection_status = initial_connection_to_dist(queue_id);
+            break;
+        }
+        default://trzeba zmienić id bo jest zajęte
+        {
+            printf("trzeba zmienić id bo jest zajęte\n");
+            msg.id_producent = connection_status;
+            connection_status = 0;
+            break;
+        }}
 
-    struct news news_to_broadcast;
-    news_to_broadcast.type = msg.info_type[0];
-    strcpy(news_to_broadcast.news_content,"Hello");
-    msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
-
-    printf("Wiadomość nadana\n");
-
-
-
-
+    }
+    
     //msg.type = 1 ;
     //msg.info = prod_info;
     //msgsnd(id, &msg,sizeof(msg) - sizeof(long), 0);
