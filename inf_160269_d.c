@@ -103,18 +103,22 @@ void init_comunicatnion(int init_queue_id){
 int main(){
     printf("######Distributor:\n");
     int id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
-    
+    struct news news_to_broadcast;
+
+    news_to_broadcast.type = 1231;
+    strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
+
     while (1)
     {   
-        struct news news_to_broadcast;
-        news_to_broadcast.type = 0;
+        news_to_broadcast.type = 1231;
         strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
+
         init_comunicatnion(id);
         for(int i = 0; i<9; i++){
             if(chanel_in_use[i])
             {
                 msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
-                if(news_to_broadcast.type == i)
+                if(news_to_broadcast.type == i+1)
                 {
                     printf("Otrzymano wiadomość do przekierowania: %s od %d\n", news_to_broadcast.news_content, i);
                 }
