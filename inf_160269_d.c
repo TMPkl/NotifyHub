@@ -45,10 +45,12 @@ void add_producent(int id){
 
 
 bool is_id_free(int id){
-    if(!producents_connected_id[id]){
-        return true;
+    for(int i = 0; i<10; i++){
+        if(producents_connected_id[i] == id){
+            return false;
+        }
     }
-    return false;
+    return true;
 }
 
 int find_free_id(){
