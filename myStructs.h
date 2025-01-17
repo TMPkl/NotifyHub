@@ -16,6 +16,7 @@ struct init_msg
 struct news
 {
     long type;   // typ zależy od treści [0-9]
+    int id_poroducer;
     char news_content[100];
 };
 

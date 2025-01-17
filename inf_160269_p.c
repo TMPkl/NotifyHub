@@ -79,21 +79,14 @@ int main(){
     msg.id_producent = my_id;
 
     int connection_status = initial_connection_to_dist(queue_id);
-    
+    struct news news_to_broadcast;
     while (1)
     {   
         switch (connection_status)
         {
         case 0: //połączenie zostało nawiązane, można nadawać informacje
-        {
-            struct news news_to_broadcast;
-            news_to_broadcast.type = msg.info_type[0];
-            strcpy(news_to_broadcast.news_content,"Hello");
-            msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
-            printf("Wiadomość nadana kanałem %d\n", msg.info_type[0]);   
-
-            return 0; //debug
-
+        { 
+            my_id = msg.id_producent;
             break;
         }
         case -1: //nie można nadawać tego typu informacji
@@ -106,10 +99,47 @@ int main(){
         default://trzeba zmienić id bo jest zajęte
         {
             printf("trzeba zmienić id bo jest zajęte\n");
-            msg.id_producent = connection_status;
+            my_id = connection_status;
             connection_status = 0;
             break;
         }}
+
+        if(connection_status == 0)
+        {
+            printf("Wybierz akcję: \n 1. Nadaj wiadomość. [1] \n 2. Dodaj kanał do nadawania. [2] \n 3. Wyjdź [3] \n\n");
+            int input_option = 0;
+            scanf("%d",&input_option);
+            switch(input_option)
+            {
+                case 1:
+                {   
+                    printf("Podaj treść wiadomości do napisania:\n");
+                    char message_content[256];
+                    scanf(" %[^\n]", message_content);
+                    strcpy(news_to_broadcast.content, message_content);
+                for(int i = 0;i<5;i++)
+                    for(int i = 0;i>5;i++)
+                    {
+                        if(!msg.info_type[i])
+                        {
+                            printf("%d \n",msg.info_type[i]);
+                        }
+                    }
+                    scanf("%d", &news_to_broadcast.type);
+                    news_to_broadcast.id_producer = my_id;
+                    msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
+                    printf("Wiadomość została nadana.\n");
+                    break;
+                }
+                case 3:
+                {
+                    //nie wiem czy trzeba zwalniać miejsce ???????????????????????????
+                    return 0; 
+                }
+            }
+
+
+        }
 
     }
     
