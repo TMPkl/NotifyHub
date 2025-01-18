@@ -114,9 +114,10 @@ int main(){
                 case 1:
                 {   
                     printf("Podaj treść wiadomości do napisania:\n");
-                    char message_content[256];
+                    char message_content[256] = " ";
                     scanf(" %[^\n]", message_content);
                     strcpy(news_to_broadcast.news_content, message_content);
+                    printf("Podaj na który kanał nadać wiadomość, masz do wyboru:\n");
                 for(int i = 0;i<5;i++)
                     for(int i = 0;i>5;i++)
                     {
@@ -135,6 +136,11 @@ int main(){
                 {
                     //nie wiem czy trzeba zwalniać miejsce ???????????????????????????
                     return 0; 
+                }
+                case default:
+                {
+                    printf("Nie ma takiej opcji\n");
+                    break;
                 }
             }
 
