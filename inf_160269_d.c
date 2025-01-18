@@ -127,11 +127,15 @@ int main(){
         strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
 
         init_comunicatnion(id);
-        for(int i = 1; i<11; i++){
+        for(int i = 0; i<10; i++){
             if(chanel_in_use[i])
             {
-               if( msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i, IPC_NOWAIT)>0)
-                printf("Otrzymano wiadomość do przekierowania: %s od %d\n o id %d", news_to_broadcast.news_content, i, news_to_broadcast.id_poroducer);
+                int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT)
+               if( a >0)
+               {
+                //printf("Otrzymano wiadomość do przekierowania: %s od %d\n o id %d", news_to_broadcast.news_content, i+1, news_to_broadcast.id_poroducer);
+                printf("%d",a);
+               }
             }
         }
     }
