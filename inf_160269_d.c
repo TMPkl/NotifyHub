@@ -80,7 +80,7 @@ void init_comunicatnion(int init_queue_id){
             if(is_chanel_free(msg.info_type[0]))
             {
                                                                     printf("Kanał i id jest wolne  ");
-                chanel_in_use[msg.info_type[0]] = msg.id_producent;
+                chanel_in_use[msg.info_type[0]-1] = msg.id_producent;
                 add_producent(msg.id_producent);
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                 feedback.status = 0;
@@ -104,7 +104,7 @@ void init_comunicatnion(int init_queue_id){
                                                                     printf("Id jest zajęte\n");
             feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
             feedback.status = find_free_id();
-            chanel_in_use[msg.info_type[0]] = feedback.status;
+            chanel_in_use[msg.info_type[0]-1] = feedback.status;
             add_producent(feedback.status);
             
             msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
@@ -133,7 +133,7 @@ int main(){
                 int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
                if( a !=-1)
                {
-                printf("Otrzymano wiadomość do przekierowania: %s od %d\n o id %d", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
+                printf("Otrzymano wiadomość do przekierowania: %s od %d o id %d\n", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
                 
                }
             }
