@@ -22,7 +22,7 @@ DEBATA 9
 #define INITIAL_COMUNICATION_KEY 123456
 
 struct init_msg msg;
-msg.info_type[5] = {0};
+
 
 int initial_connection_to_dist(int id){
     if(id == -1){
@@ -62,6 +62,7 @@ void choose_news_type(struct init_msg *msg){
     }
     int type;
     scanf("%d", &type);
+    msg->info_type = {0,0,0,0,0};
     msg->info_type[0] = type+1;
     return;
 }
@@ -69,6 +70,7 @@ void choose_news_type(struct init_msg *msg){
 
 
 int main(){
+    
     int queue_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
     int initial_info_type;
     int my_id;
@@ -121,10 +123,10 @@ int main(){
                     printf("Podaj na który kanał nadać wiadomość, masz do wyboru:\n");
                     for(int i = 0;i<5;i++)
                     {
-                        // if(!msg.info_type[i])
-                        // {
+                         if(msg.info_type[i])
+                         {
                             printf("%d \n",msg.info_type[i]);
-                        // }
+                         }
                     }
                     scanf("%d", &news_to_broadcast.type);
                     news_to_broadcast.id_poroducer = my_id;
