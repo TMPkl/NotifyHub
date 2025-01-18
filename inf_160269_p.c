@@ -116,7 +116,7 @@ int main(){
                     printf("Podaj treść wiadomości do napisania:\n");
                     char message_content[256];
                     scanf(" %[^\n]", message_content);
-                    strcpy(news_to_broadcast.message_content, message_content);
+                    strcpy(news_to_broadcast.news_content, message_content);
                 for(int i = 0;i<5;i++)
                     for(int i = 0;i>5;i++)
                     {
