@@ -62,8 +62,10 @@ void choose_news_type(struct init_msg *msg){
     }
     int type;
     scanf("%d", &type);
-    msg->info_type = {0,0,0,0,0};
-    msg->info_type[0] = type+1;
+    for(int i = 0; i < 5; i++) {
+        msg->info_type[i] = 0;
+    }
+    msg->info_type[0] = type;
     return;
 }
 
