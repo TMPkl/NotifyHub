@@ -130,7 +130,7 @@ int main(){
         for(int i = 0; i<10; i++){
             if(chanel_in_use[i])
             {
-                int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT)
+                int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
                if( a >0)
                {
                 //printf("Otrzymano wiadomość do przekierowania: %s od %d\n o id %d", news_to_broadcast.news_content, i+1, news_to_broadcast.id_poroducer);
