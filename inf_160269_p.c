@@ -22,6 +22,7 @@ DEBATA 9
 #define INITIAL_COMUNICATION_KEY 123456
 
 struct init_msg msg;
+msg.info_type[5] = {0};
 
 int initial_connection_to_dist(int id){
     if(id == -1){
@@ -120,14 +121,12 @@ int main(){
                     printf("Podaj na który kanał nadać wiadomość, masz do wyboru:\n");
                     for(int i = 0;i<5;i++)
                     {
-                        if(!msg.info_type[i])
-                        {
-                            printf("%d \n",msg.info_type[i]+1);
-                        }
+                        // if(!msg.info_type[i])
+                        // {
+                            printf("%d \n",msg.info_type[i]);
+                        // }
                     }
-                    int input_channel;
-                    scanf("%d", &input_channel);
-                    news_to_broadcast.type = input_channel-1;
+                    scanf("%d", &news_to_broadcast.type);
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
                     printf("Wiadomość została nadana, na kanale %d. \n", news_to_broadcast.type);
