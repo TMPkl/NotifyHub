@@ -137,7 +137,7 @@ int main(){
                     //nie wiem czy trzeba zwalniać miejsce ???????????????????????????
                     return 0; 
                 }
-                case default:
+                default:
                 {
                     printf("Nie ma takiej opcji\n");
                     break;
