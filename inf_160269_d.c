@@ -133,7 +133,7 @@ int main(){
                 int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
                if( a !=-1)
                {
-                printf("Otrzymano wiadomość do przekierowania: %s od %d\n o id %d", news_to_broadcast.news_content, i+1, news_to_broadcast.id_poroducer);
+                printf("Otrzymano wiadomość do przekierowania: %s od %d\n o id %d", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
                 
                }
             }

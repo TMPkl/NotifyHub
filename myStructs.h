@@ -26,16 +26,16 @@ struct producent_distributor_feedback{
 };
 
 static char* types_of_info[]={
-    "ROZRYWKA" ,
-    "SPORT" , //1
-    "SWIAT" , //2
-    "POLITYKA" , //3
-    "KONFLITKY" , //4   
-    "ODKRYCIA" , //5
-    "POGODA" , //6
-    "WYWIADY" , //7
-    "GIELDA" , //8
-    "DEBATA"  //9
+    "ROZRYWKA" , //1
+    "SPORT" , //2
+    "SWIAT" , //3
+    "POLITYKA" , //4
+    "KONFLITKY" , //5   
+    "ODKRYCIA" , //6
+    "POGODA" , //7
+    "WYWIADY" , //8
+    "GIELDA" , //9
+    "DEBATA"  //10
     };
 
 
