@@ -118,18 +118,19 @@ int main(){
                     scanf(" %[^\n]", message_content);
                     strcpy(news_to_broadcast.news_content, message_content);
                     printf("Podaj na który kanał nadać wiadomość, masz do wyboru:\n");
-                for(int i = 0;i<5;i++)
-                    for(int i = 0;i>5;i++)
+                    for(int i = 0;i<5;i++)
                     {
                         if(!msg.info_type[i])
                         {
-                            printf("%d \n",msg.info_type[i]);
+                            printf("%d \n",msg.info_type[i]+1);
                         }
                     }
-                    scanf("%d", &news_to_broadcast.type);
+                    int input_channel;
+                    scanf("%d", &input_channel);
+                    news_to_broadcast.type = input_channel-1;
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
-                    printf("Wiadomość została nadana.\n");
+                    printf("Wiadomość została nadana, na kanale %d. \n", news_to_broadcast.type);
                     break;
                 }
                 case 3:
