@@ -116,7 +116,7 @@ int main(){
                     printf("Podaj treść wiadomości do napisania:\n");
                     char message_content[256];
                     scanf(" %[^\n]", message_content);
-                    strcpy(news_to_broadcast.content, message_content);
+                    strcpy(news_to_broadcast.id_poroducer, message_content);
                 for(int i = 0;i<5;i++)
                     for(int i = 0;i>5;i++)
                     {
@@ -126,7 +126,7 @@ int main(){
                         }
                     }
                     scanf("%d", &news_to_broadcast.type);
-                    news_to_broadcast.id_producer = my_id;
+                    news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
                     printf("Wiadomość została nadana.\n");
                     break;
