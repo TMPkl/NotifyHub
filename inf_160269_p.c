@@ -26,19 +26,6 @@ DEBATA 9
 struct init_msg msg;
 
 
-
-
-
-bool isElementInArray(int arr[], int size, int element) {
-    for (int i = 0; i < size; i++) {
-        if (arr[i] == element) {
-            return true; 
-        }
-    }
-    return false; 
-}
-
-
 int initial_connection_to_dist(int id){
     if(id == -1){
         printf("msgget not connected\n");
@@ -148,11 +135,19 @@ int main(){
                     int input_channel_to_broadcast;
                     scanf("%d", &input_channel_to_broadcast);
 
-                    if(isElementInArray(msg.info_type,5,input_channel_to_broadcast))
+                    for(int i = 0; i <5; i++ )
                     {
-                        printf("You are not allowed to broadcast on this chanel:\n");
-                        break;
+                            if(msg.info_type[i] == input_channel_to_broadcast)
+                            {
+                                break;
+                            }
+                            else if(i == 4)
+                        {
+                            printf("You are not allowed to broadcast on this chanel:\n");
+                            break;
+                        }
                     }
+                    
                     news_to_broadcast.type = input_channel_to_broadcast;
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
