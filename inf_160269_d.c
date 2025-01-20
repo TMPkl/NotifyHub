@@ -163,12 +163,13 @@ int main(){
                                                 {
                                                     printf("%d ",i+1);
                                                 }
+                                                printf("\n");
                                                 for(int i = 0;i<10;i++)
                                                 {
                                                     printf("%d ",chanel_in_use[i]);
                                                 }
-                                                printf("\n");
-                                                usleep(100);
+                                                printf("\n");printf("\n");
+                                                sleep(1);
         for(int i = 0; i<10; i++){
                 
             if(chanel_in_use[i])
