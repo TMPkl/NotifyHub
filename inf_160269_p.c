@@ -200,8 +200,9 @@ int main(){
                     rqst_to_add_chanel.type = UPDATING_CHANEL;
                     rqst_to_add_chanel.id_producent = my_id;
                     rqst_to_add_chanel.new_chanel_to_broadcast = type;
+                    rqst_to_add_chanel.status = 0;
                     msgsnd(queue_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
-                    msgrcv(queue_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), UPDATING_CHANEL, 0);
+                    msgrcv(queue_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), UPDATKING_CHANEL_FEEDBACK, 0);
                     printf("%d",rqst_to_add_chanel.status);
                     if(rqst_to_add_chanel.status == 0)
                     {

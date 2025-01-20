@@ -69,14 +69,23 @@ void add_chanel_to_producer(int updating_chanell_id){
     int rcv_status = msgrcv(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), UPDATING_CHANEL, IPC_NOWAIT);
     printf("trying to add chanels\n");
     
+
     if(rcv_status == -1)
         return;
     printf("debug1\n");
     
+    struct updating_channels feedback;
+
+    feedback.id_producent = rqst_to_add_chanel.id_producent;
+    feedback.new_chanel_to_broadcast = rqst_to_add_chanel.new_chanel_to_broadcast;
+    feedback.type = UPDATKING_CHANEL_FEEDBACK;
+
     if(rqst_to_add_chanel.new_chanel_to_broadcast <=0 || rqst_to_add_chanel.new_chanel_to_broadcast > 10)
     {
-        rqst_to_add_chanel.status = -1; // nie ma takiego kanału
-        msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+        feedback.status = -1;                                   // nie ma takiego kanału
+
+        msgsnd(updating_chanell_id, &feedback, sizeof(feedback) - sizeof(long), 0);
+        
         return;
     }
     printf("debug1\n");
@@ -84,14 +93,17 @@ void add_chanel_to_producer(int updating_chanell_id){
     {
         chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] = rqst_to_add_chanel.id_producent;
         add_producent(rqst_to_add_chanel.id_producent);
-        rqst_to_add_chanel.status = 0;
-        msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+        
+        feedback.status = 0;                                                    // kanał dodany
+
+        msgsnd(updating_chanell_id, &feedback, sizeof(feedback) - sizeof(long), 0);
         return;
     }
     else
     {
-        rqst_to_add_chanel.status = -2; // kanał jest zajęty
-        msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+
+        feedback.status = -2;                                               // kanał zajęty
+        msgsnd(updating_chanell_id, &feedback, sizeof(feedback) - sizeof(long), 0);
         return;
     }
     
