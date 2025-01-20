@@ -181,7 +181,7 @@ int main(){
                         }
                         else if(msg.info_type[i] == 0)
                         {
-                            msg.info_type[i] = type;
+                            
                             break;
                         }
                         else if(i == 4)
@@ -204,6 +204,7 @@ int main(){
                     if(rqst_to_add_chanel.status == 0)
                     {
                         printf("Kanał został dodany\n");
+                        msg.info_type[i] = type;
                     }
                     else if(rqst_to_add_chanel.status == -1)
                     {

@@ -161,13 +161,14 @@ int main(){
         add_chanel_to_producer(id);
                                                 for(int i = 0;i<10;i++)
                                                 {
-                                                    if(chanel_in_use[i])
-                                                    {
-                                                        printf("Kanał %d jest zajęty przez %d\n", i+1, chanel_in_use[i]);
-                                                    }
+                                                    printf("%d ",i+1);
+                                                }
+                                                for(int i = 0;i<10;i++)
+                                                {
+                                                    printf("%d ",chanel_in_use[i]);
                                                 }
                                                 printf("\n");
-                                                sleep(1);
+                                                usleep(100);
         for(int i = 0; i<10; i++){
                 
             if(chanel_in_use[i])
