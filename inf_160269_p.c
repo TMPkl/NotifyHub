@@ -5,6 +5,8 @@
 #include <string.h>
 #include "myStructs.h" 
 #include <stdbool.h>
+#include <unistd.h>
+
 
 /*
 ROZRYWKA 0
