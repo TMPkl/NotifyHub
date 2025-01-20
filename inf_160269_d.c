@@ -168,8 +168,10 @@ int main(){
                                                 {
                                                     printf("%d ",chanel_in_use[i]);
                                                 }
-                                                printf("\n");printf("\n");
+                                                printf("\n");
+                                                printf("\n");
                                                 sleep(1);
+
         for(int i = 0; i<10; i++){
                 
             if(chanel_in_use[i])
