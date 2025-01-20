@@ -157,8 +157,16 @@ int main(){
 
         init_comunicatnion(id);
         add_chanel_to_producer(id);
-
+                                                for(int i = 0;i<10;i++)
+                                                {
+                                                    if(chanel_in_use[i])
+                                                    {
+                                                        printf("Kanał %d jest zajęty przez %d\n", i+1, chanel_in_use[i]);
+                                                    }
+                                                }
+                                                usleep(1000);
         for(int i = 0; i<10; i++){
+                
             if(chanel_in_use[i])
             {
                 int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
