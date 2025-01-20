@@ -166,7 +166,8 @@ int main(){
                                                         printf("Kanał %d jest zajęty przez %d\n", i+1, chanel_in_use[i]);
                                                     }
                                                 }
-                                                usleep(1000);
+                                                printf("\n");
+                                                sleep(1);
         for(int i = 0; i<10; i++){
                 
             if(chanel_in_use[i])
