@@ -25,6 +25,13 @@ struct producent_distributor_feedback{
     int status; //0 if all good, [1-10] if id_producent is useed and the status is producent_id , or -1 if info_type is used
 };
 
+struct updating_channels{
+    long type;
+    int id_producent;
+    int new_chanel_to_broadcast;
+    int status; 
+};
+
 static char* types_of_info[]={
     "ROZRYWKA" , //1
     "SPORT" , //2

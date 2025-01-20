@@ -147,7 +147,7 @@ int main(){
                             break;
                         }
                     }
-                    
+
                     news_to_broadcast.type = input_channel_to_broadcast;
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
@@ -158,6 +158,60 @@ int main(){
                 {
                     //nie wiem czy trzeba zwalniać miejsce ???????????????????????????
                     return 0; 
+                }
+                case 2: ////prosze o dostep do nowego kanału
+                {   
+                    bool flag = false;
+                                        
+                    printf("Choose new chanel to broadcast type: \n");
+                    for(int i = 0; i<10; i++){
+                        printf("%d. %s\n", i+1, types_of_info[i]);
+                    }
+                    int type;
+                    scanf("%d", &type);
+
+                    for(int i =0; i<5; i++)
+                    {
+                        if(msg.info_type[i] == type)
+                        {
+                            printf("You are already broadcasting on this chanel\n");
+                            break;
+                        }
+                        else if(msg.info_type[i] == 0)
+                        {
+                            msg.info_type[i] = type;
+                            break;
+                        }
+                        else if(i == 4)
+                        {
+                            printf("You are broadcasting at maximum number of channels possible for one producer.\n");
+                            flag = true;
+                        }
+                    }
+                    if(flag)
+                    {
+                          break;
+                    }
+
+                    struct updating_channels rqst_to_add_chanel;
+                    rqst_to_add_chanel.type = UPDATING_CHANEL;
+                    rqst_to_add_chanel.id_producent = my_id;
+                    rqst_to_add_chanel.new_chanel_to_broadcast = type;
+                    msgsnd(queue_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+                    msgrcv(queue_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), UPDATING_CHANEL, 0);
+                    if(rqst_to_add_chanel.status == 0)
+                    {
+                        printf("Kanał został dodany\n");
+                    }
+                    else if(rqst_to_add_chanel.status == -1)
+                    {
+                        printf("Nie ma takiego kanału\n");
+                    }
+                    else if(rqst_to_add_chanel.status == -2)
+                    {
+                        printf("Kanał jest zajęty\n");
+                    }
+                    break;
                 }
                 default:
                 {

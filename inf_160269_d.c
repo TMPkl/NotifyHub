@@ -36,7 +36,7 @@ bool is_chanel_free(int chanel){
 
 void add_producent(int id){
     for(int i = 0; i<10; i++){
-        if(!producents_connected_id[i]){
+        if(!producents_connected_id[i] | id == producents_connected_id[i]){
             producents_connected_id[i] = id;
             return;
         }
@@ -61,6 +61,35 @@ int find_free_id(){
     }
     return -1;
 }
+
+void add_chanel_to_producer(int updating_chanell_id){
+    struct updating_channels rqst_to_add_chanel;
+    int rcv_status = msgrcv(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), UPDATING_CHANEL, IPC_NOWAIT);
+    if(rcv_status == -1)
+        return;
+    if(rqst_to_add_chanel.new_chanel_to_broadcast <=0 || rqst_to_add_chanel.new_chanel_to_broadcast > 10)
+    {
+        rqst_to_add_chanel.status = -1; // nie ma takiego kanału
+        msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+        return;
+    }
+    
+    if(chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] == 0)
+    {
+        chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] = rqst_to_add_chanel.id_producent;
+        add_producent(rqst_to_add_chanel.id_producent);
+        rqst_to_add_chanel.status = 0;
+        msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+        return;
+    }
+    else
+    {
+        rqst_to_add_chanel.status = -2; // kanał jest zajęty
+        msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
+        return;
+    }
+    
+} 
 
 
 
@@ -127,6 +156,8 @@ int main(){
         strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
 
         init_comunicatnion(id);
+        add_chanel_to_producer(id);
+
         for(int i = 0; i<10; i++){
             if(chanel_in_use[i])
             {
