@@ -22,6 +22,13 @@ DEBATA 9
 
 */
 
+/*
+TODO:
+- jest jakis błąd żę jak 2 jest już zajęto to nie mg dodać 1
+
+
+*/
+
 // 
 #define INITIAL_COMUNICATION_KEY 123456
 
