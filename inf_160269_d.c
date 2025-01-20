@@ -67,15 +67,19 @@ int find_free_id(){
 void add_chanel_to_producer(int updating_chanell_id){
     struct updating_channels rqst_to_add_chanel;
     int rcv_status = msgrcv(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), UPDATING_CHANEL, IPC_NOWAIT);
+    printf("trying to add chanels\n");
+    
     if(rcv_status == -1)
         return;
+    printf("debug1\n");
+    
     if(rqst_to_add_chanel.new_chanel_to_broadcast <=0 || rqst_to_add_chanel.new_chanel_to_broadcast > 10)
     {
         rqst_to_add_chanel.status = -1; // nie ma takiego kanału
         msgsnd(updating_chanell_id, &rqst_to_add_chanel, sizeof(rqst_to_add_chanel) - sizeof(long), 0);
         return;
     }
-    
+    printf("debug1\n");
     if(chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] == 0)
     {
         chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] = rqst_to_add_chanel.id_producent;
