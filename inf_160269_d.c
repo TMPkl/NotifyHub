@@ -240,6 +240,7 @@ void init_client(id)
                 j++;         
             }
         }
+        msgsnd(client_queue_id, &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);
         msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT);
         
 
