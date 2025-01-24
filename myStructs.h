@@ -6,6 +6,26 @@
 #define PRODUCENT_DISTRIBUTOR_FEEDBACK 13
 #define UPDATKING_CHANEL_FEEDBACK 14
 
+#define INITIAL_CLIENT_DISTRIBUTOR_CHANEL 15
+#define INITIAL_CLIENT_DISTRIBUTOR_FEEDBACK 16
+
+#define NEWS_REQUEST 11 //klient pyta o newsy
+#define NEWS_BROADCAST 12 //distributor wysyła liste dostepnych newsów
+
+struct init_client
+{
+    long type;
+    int id_client; //musi być unikalne, 4 cyfry
+};
+
+struct news_request
+{
+    long type;
+    int id_client;
+    int chanel[10];
+};
+
+
 struct init_msg
 {
     long type;  //INITIAL_CHANEL dla inicjalizacji kanału UPDAING_CHANEL dla aktualizacji
