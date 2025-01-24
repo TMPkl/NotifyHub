@@ -184,6 +184,7 @@ int main(){
                         if(msg.info_type[i] == type)
                         {
                             printf("You are already broadcasting on this chanel\n");
+                            flag = true;
                             break;
                         }
                         else if(msg.info_type[i] == 0)
