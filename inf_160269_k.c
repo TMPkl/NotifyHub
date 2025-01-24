@@ -51,7 +51,7 @@ void init_producer()
                 j++;
         }
         }
-        printf("Wybierz kanał: ",);
+        printf("Wybierz kanał: ");
         printf("\n");
         int chanel;
         scanf("%d", &chanel);
