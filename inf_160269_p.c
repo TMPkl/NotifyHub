@@ -223,6 +223,14 @@ int main(){
                     else if(rqst_to_add_chanel.status == -2)
                     {
                         printf("Kanał jest zajęty\n");
+                        for(int i = 0; i<5; i++)
+                        {
+                            if(msg.info_type[i] == type)
+                            {
+                                msg.info_type[i] = 0;
+                                break;
+                            }
+                        }
                     }
                     break;
                 }
