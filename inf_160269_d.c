@@ -57,8 +57,13 @@ bool is_id_free(int id){
 
 int find_free_id(){
     for(int i = 1;; i++){
-        if(!producents_connected_id[i]){
-            return i;
+        for(int j = 0; j<10; j++){
+            if(producents_connected_id[j] == i){
+                break;
+            }
+            if(j == 9){
+                return i;
+            }
         }
     }
     return -1;
