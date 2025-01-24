@@ -235,6 +235,11 @@ void init_client(int id)
                 list_of_producers.chanel[j] = i+1;                 //wysłanie listy producentów, kolejne numery kanałów
                 j++;         
             }
+            else
+            {
+                list_of_producers.chanel[j] = 0;
+                j++;
+            }
         }
         msgsnd(client_queue_id, &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);
         msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT);
