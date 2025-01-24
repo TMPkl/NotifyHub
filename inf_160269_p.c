@@ -143,7 +143,7 @@ int main(){
                     }
                     int input_channel_to_broadcast;
                     scanf("%d", &input_channel_to_broadcast);
-
+                    bool news_flag = false;
                     for(int i = 0; i <5; i++ )
                     {
                             if(msg.info_type[i] == input_channel_to_broadcast)
@@ -153,15 +153,17 @@ int main(){
                             else if(i == 4)
                         {
                             printf("You are not allowed to broadcast on this chanel:\n");
+                            news_flag = true;   
                             break;
                         }
                     }
 
-                    news_to_broadcast.type = input_channel_to_broadcast;
+                    if(!news_flag)
+                   { news_to_broadcast.type = input_channel_to_broadcast;
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
                     printf("Wiadomość została nadana, na kanale %d. \n", news_to_broadcast.type);
-                    break;
+                    break;}
                 }
                 case 3:
                 {
