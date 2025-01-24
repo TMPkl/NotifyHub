@@ -137,7 +137,7 @@ void init_comunicatnion(int init_queue_id){
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                 feedback.status = 0;
                 msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
-                                                                    printf("Wysłano feedback\n");
+                                                                   // printf("Wysłano feedback\n");
             }
             else
             {   
@@ -145,23 +145,33 @@ void init_comunicatnion(int init_queue_id){
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                 feedback.status = -1;
                 msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
-                                                                    printf("przydzielono inne id: %d\n", feedback.status);
-                                                                    printf("Wysłano feedback\n");
+                                                                   // printf("Wysłano feedback\n");
 
             }
 
         }
         else
-        {
-                                                                    printf("Id jest zajęte\n");
-            feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
-            feedback.status = find_free_id();
-            chanel_in_use[msg.info_type[0]-1] = feedback.status;
-            add_producent(feedback.status);
-            
-            msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
-                                                                    printf("Wysłano feedback\n");
-            
+        { 
+            if(is_chanel_free(msg.info_type[0]))
+                {                                                      printf("Id jest zajęte\n");
+                    feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
+                    feedback.status = find_free_id();
+                    chanel_in_use[msg.info_type[0]-1] = feedback.status;
+                    add_producent(feedback.status);
+                    
+                    msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
+                                                                            //printf("Wysłano feedback\n");
+                    
+                }
+            else
+            {   
+                                                                    printf("Kanał i id jest zajęte  ");
+                feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
+                feedback.status = -1;
+                msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
+                                                                    //printf("Wysłano feedback\n");
+
+            }
         }
     }
 }
