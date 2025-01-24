@@ -27,6 +27,17 @@ struct init_msg msg;
 int chanel_in_use[10] = {0}; // 0 dla wolnego,  id_producenta dla zajetego - maysalnie obułguje 10 kanałów
 int producents_connected_id[10] = {0}; // lista id producentów obecnie podłączonych do nadawcy - maksylnie obsługuje 10 producentów 
 
+int chanel_subcribers[10][10]; // lista subskrybentów dla danego kanału - maksymalnie 10 subskrybentów na 10 kanałów
+
+for(int i = 0; i<10; i++){
+    for(int j = 0; j<10; j++){
+        chanel_subcribers[i][j] = 0;
+    }
+}
+
+struct news client_news;
+
+
 
 
 bool is_chanel_free(int chanel){
@@ -116,6 +127,7 @@ void add_chanel_to_producer(int updating_chanell_id){
 
 
 
+
 void init_comunicatnion(int init_queue_id){
     
     struct init_msg msg;
@@ -175,13 +187,75 @@ void init_comunicatnion(int init_queue_id){
         }
     }
 }
+
+void init_client(id)
+{
+    struct init_client client;
+    struct producent_distributor_feedback feedback;
+    client.type = INITIAL_CLIENT_DISTRIBUTOR_CHANEL;
+    feedback.type = INITIAL_CLIENT_DISTRIBUTOR_FEEDBACK;
+
+    if (msgrcv(id, &client, sizeof(client) - sizeof(long), INITIAL_CLIENT_DISTRIBUTOR_CHANEL, IPC_NOWAIT)>0)
+    { 
+        printf("Otrzymano wiadomość o checi uzyskania ip przez klienta, wysylanie feedback\n");
+        if (client.id_client <0 || client.id_client > 999)
+        {
+            feedback.status = -1;
+            msgsnd(id, &feedback, sizeof(feedback) - sizeof(long), 0);
+            return;
+        }
+        for(int i = 0; i <10; i++)
+        {
+            for(int j = 0; j <10; j++)
+            {
+                if(chanel_subcribers[i][j] == client.id_client)
+                {
+                    feedback.status = -1;
+                    msgsnd(id, &feedback, sizeof(feedback) - sizeof(long), 0);
+                    return;
+                }
+            }
+        }
+        feedback.status = 0;
+        msgsnd(id, &feedback, sizeof(feedback) - sizeof(long), 0);
+
+        key_t  key = client.id_client*1000;
+        int client_queue_id = msgget(key, IPC_CREAT | 0644);
+        if(client_queue_id == -1)
+        {
+            printf("Nie udało się utworzyć kolejki dla klienta\n");
+            return;
+        }
+        
+        struct news_request news_rqst;
+        struct news_request list_of_producers;
+        list_of_producers.type = NEWS_BROADCAST;
+        list_of_producers.id_client = client.id_client;
+        int j = 0;
+        for(int i = 0; i<10; i++)
+        {   
+            if(chanel_in_use[i] != 0)
+            {
+                list_of_producers.chanel[j] = i+1;                 //wysłanie listy producentów, kolejne numery kanałów
+                j++;         
+            }
+        }
+        msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT);
+        
+
+
+    }
+    else
+    {
+        return;
+    }
+}
+
+
 int main(){
     printf("######Distributor:\n");
     int id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
     struct news news_to_broadcast;
-
-    news_to_broadcast.type = 1231;
-    strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
 
     while (1)
     {   
@@ -203,8 +277,7 @@ int main(){
                                                 printf("\n");
                                                 sleep(1);
 
-        for(int i = 0; i<10; i++){
-                
+        for(int i = 0; i<10; i++){        
             if(chanel_in_use[i])
             {
                 int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);

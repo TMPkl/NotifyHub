@@ -114,7 +114,7 @@ int main(){
         }
         default://trzeba zmienić id bo jest zajęte
         {
-            printf("trzeba zmienić id bo jest zajęte\n");
+            printf("Id that you have chosen had already been used.\n");
             my_id = connection_status;
             connection_status = 0;
             break;
@@ -243,10 +243,7 @@ int main(){
                     break;
                 }
             }
-
-
         }
-
     }
     
     //msg.type = 1 ;

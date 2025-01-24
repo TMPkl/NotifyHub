@@ -12,7 +12,6 @@
 
 int my_id;
 struct init_client client;
-struct 
 
 void init_producer()
 {   int init_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
