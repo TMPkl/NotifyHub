@@ -125,8 +125,8 @@ void update_chanel_subscribers(int client_queue_id, struct news_request *news_rq
             for (int i = 0; i < 10; i++) {
                 if (news_rqst->chanel[i] != 0) {
                     for (int j = 0; j < 10; j++) {
-                        if (chanel_subcribers[news_rqst->chanel[i] - 1][j] == 0) {
-                            chanel_subcribers[news_rqst->chanel[i] - 1][j] = client_queue_id;
+                        if (chanel_subcribers[i][j] == 0) {
+                            chanel_subcribers[i][j] = client_queue_id;
                             break;
                         }
                     }
@@ -306,7 +306,7 @@ int main(){
             }
             printf("\n");
         }
-        
+
                                                 sleep(1);
 
         for(int i = 0; i<10; i++){        
