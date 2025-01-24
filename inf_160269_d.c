@@ -29,11 +29,7 @@ int producents_connected_id[10] = {0}; // lista id producentów obecnie podłąc
 
 int chanel_subcribers[10][10]; // lista subskrybentów dla danego kanału - maksymalnie 10 subskrybentów na 10 kanałów
 
-for(int i = 0; i<10; i++){
-    for(int j = 0; j<10; j++){
-        chanel_subcribers[i][j] = 0;
-    }
-}
+
 
 struct news client_news;
 
@@ -188,7 +184,7 @@ void init_comunicatnion(int init_queue_id){
     }
 }
 
-void init_client(id)
+void init_client(int id)
 {
     struct init_client client;
     struct producent_distributor_feedback feedback;
@@ -255,6 +251,15 @@ void init_client(id)
 
 int main(){
     printf("######Distributor:\n");
+
+    for(int i = 0; i<10; i++){
+        for(int j = 0; j<10; j++){
+            chanel_subcribers[i][j] = 0;
+        }
+    }
+
+
+
     int id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
     struct news news_to_broadcast;
 

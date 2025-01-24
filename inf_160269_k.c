@@ -12,7 +12,7 @@
 
 int my_id;
 struct init_client client;
-int news_queue_id
+int news_queue_id;
 
 void init_producer()
 {   int init_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
