@@ -121,7 +121,18 @@ void add_chanel_to_producer(int updating_chanell_id){
     
 } 
 
-
+void update_chanel_subscribers(int client_queue_id, struct news_request *news_rqst) {
+            for (int i = 0; i < 10; i++) {
+                if (news_rqst->chanel[i] != 0) {
+                    for (int j = 0; j < 10; j++) {
+                        if (chanel_subcribers[news_rqst->chanel[i] - 1][j] == 0) {
+                            chanel_subcribers[news_rqst->chanel[i] - 1][j] = client_queue_id;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
 
 void init_comunicatnion(int init_queue_id){
@@ -242,10 +253,12 @@ void init_client(int id)
             }
         }
         msgsnd(client_queue_id, &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);
-        msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT);
+        msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, 0);
+        printf("Otrzymano zapytanie o newsy od klienta o id: %d, o kanał: %d\n", news_rqst.id_client);
+
+        update_chanel_subscribers(client_queue_id, &news_rqst);
         
-
-
+        return;
     }
     else
     {
@@ -276,17 +289,24 @@ int main(){
         init_comunicatnion(id);
         add_chanel_to_producer(id);
         init_client(id);
-                                                for(int i = 0;i<10;i++)
-                                                {
-                                                    printf("%d ",i+1);
-                                                }
-                                                printf("\n");
-                                                for(int i = 0;i<10;i++)
-                                                {
-                                                    printf("%d ",chanel_in_use[i]);
-                                                }
-                                                printf("\n");
-                                                printf("\n");
+                                                // for(int i = 0;i<10;i++)
+                                                // {
+                                                //     printf("%d ",i+1);
+                                                // }
+                                                // printf("\n");
+                                                // for(int i = 0;i<10;i++)
+                                                // {
+                                                //     printf("%d ",chanel_in_use[i]);
+                                                // }
+                                                // printf("\n");
+                                                // printf("\n");
+        for(int i = 0; i<10; i++){
+            for(int j = 0; j<10; j++){
+                printf("%d ", chanel_subcribers[i][j]);
+            }
+            printf("\n");
+        }
+        
                                                 sleep(1);
 
         for(int i = 0; i<10; i++){        

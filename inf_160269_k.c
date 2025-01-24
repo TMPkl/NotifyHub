@@ -41,13 +41,43 @@ void init_producer()
         }
         msgrcv(news_queue_id, &list_of_producers, sizeof(list_of_producers) - sizeof(long), NEWS_BROADCAST, 0);
         printf("Lista producentów: \n");
+
+        int j =1;
+       
         for (int i = 0; i < 10; i++)
         {
-            if(list_of_producers.chanel[i] != 0)
+            if(list_of_producers.chanel[i] != 0){
                 printf("%d. kanał o treści: %s\n", i+1, types_of_info[list_of_producers.chanel[i]-1]);
+                j++;
         }
-        
+        }
+        printf("Wybierz kanał: ",);
+        printf("\n");
+        int chanel;
+        scanf("%d", &chanel);
 
+        for(int i =0; i<10; i++)
+        {
+            if(list_of_producers.chanel[i] == chanel)
+            {
+                printf("Wybrany kanał: %s\n", types_of_info[chanel-1]);
+                break;
+            }
+            else if(i == 9)
+            {
+                printf("Nie ma takiego kanału, spróbuj ponownie później.\n");
+                return;
+            }
+        }
+
+        struct news_request news_rqst;
+        news_rqst.type = NEWS_REQUEST;
+        news_rqst.id_client = my_id;
+        for (int i = 0; i < 10; i++)
+        {
+            news_rqst.chanel[i] = 0;
+        }
+        news_rqst.chanel[chanel-1] = 1;
 
         return;
     }
