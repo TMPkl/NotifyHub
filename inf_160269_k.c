@@ -78,6 +78,7 @@ void init_producer()
             news_rqst.chanel[i] = 0;
         }
         news_rqst.chanel[chanel-1] = 1;
+        msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
 
         return;
     }
