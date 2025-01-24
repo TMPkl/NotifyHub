@@ -270,6 +270,7 @@ int main(){
 
         init_comunicatnion(id);
         add_chanel_to_producer(id);
+        init_client(id);
                                                 for(int i = 0;i<10;i++)
                                                 {
                                                     printf("%d ",i+1);

@@ -20,6 +20,7 @@ void init_producer()
     scanf("%d", &my_id);
     client.id_client = my_id;
     client.type = INITIAL_CLIENT_DISTRIBUTOR_CHANEL;
+    printf("czy to sie wykonuje?");
     msgsnd(init_id, &client, sizeof(client) - sizeof(long), 0);
     struct producent_distributor_feedback feedback;
     msgrcv(init_id, &feedback, sizeof(feedback) - sizeof(long), INITIAL_CLIENT_DISTRIBUTOR_FEEDBACK, 0);
