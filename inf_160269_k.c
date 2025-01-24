@@ -20,7 +20,6 @@ void init_producer()
     scanf("%d", &my_id);
     client.id_client = my_id;
     client.type = INITIAL_CLIENT_DISTRIBUTOR_CHANEL;
-    printf("czy to sie wykonuje?");
     msgsnd(init_id, &client, sizeof(client) - sizeof(long), 0);
     struct producent_distributor_feedback feedback;
     msgrcv(init_id, &feedback, sizeof(feedback) - sizeof(long), INITIAL_CLIENT_DISTRIBUTOR_FEEDBACK, 0);
@@ -36,6 +35,10 @@ void init_producer()
         printf("Połączono z id: %d\n", my_id);
         news_queue_id = msgget(my_id*1000, IPC_CREAT | 0644);
         struct news_request list_of_producers;
+        for (int i = 0; i < 10; i++)
+        {
+            list_of_producers.chanel[i] = 0;
+        }
         msgrcv(news_queue_id, &list_of_producers, sizeof(list_of_producers) - sizeof(long), NEWS_BROADCAST, 0);
         printf("Lista producentów: \n");
         for (int i = 0; i < 10; i++)
