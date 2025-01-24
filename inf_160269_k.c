@@ -44,7 +44,7 @@ void init_producer()
         for (int i = 0; i < 10; i++)
         {
             if(list_of_producers.chanel[i] != 0)
-                printf("%d. kanał o treści: %d\n", i+1, types_of_info[list_of_producers.chanel[i]-1]);
+                printf("%d. kanał o treści: %s\n", i+1, types_of_info[list_of_producers.chanel[i]-1]);
         }
         
 
