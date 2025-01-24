@@ -28,8 +28,9 @@ int chanel_in_use[10] = {0}; // 0 dla wolnego,  id_producenta dla zajetego - may
 int producents_connected_id[10] = {0}; // lista id producentów obecnie podłączonych do nadawcy - maksylnie obsługuje 10 producentów 
 
 int chanel_subcribers[10][10]; // lista subskrybentów dla danego kanału - maksymalnie 10 subskrybentów na 10 kanałów
+int connected_clients_id[10] = {0}; // lista id klientów podłączonych do dystrybutora - maksymalnie 10 klientów
 
-
+int clients_queue_id[10]= {0}; // lista id kolejek klientów - maksymalnie 10 klientów
 
 struct news client_news;
 
@@ -213,16 +214,23 @@ void init_client(int id)
         }
         for(int i = 0; i <10; i++)
         {
-            for(int j = 0; j <10; j++)
+            if(connected_clients_id[i] == client.id_client)
             {
-                if(chanel_subcribers[i][j] == client.id_client)
-                {
-                    feedback.status = -1;
-                    msgsnd(id, &feedback, sizeof(feedback) - sizeof(long), 0);
-                    return;
-                }
+                feedback.status = -1;
+                msgsnd(id, &feedback, sizeof(feedback) - sizeof(long), 0);
+                return;
             }
         }
+        for (int i = 0; i < 10; i++)
+        {
+            if (connected_clients_id[i] == 0)
+            {
+                connected_clients_id[i] = client.id_client;
+                break;
+            }
+        }
+
+
         feedback.status = 0;
         msgsnd(id, &feedback, sizeof(feedback) - sizeof(long), 0);
 
@@ -232,6 +240,14 @@ void init_client(int id)
         {
             printf("Nie udało się utworzyć kolejki dla klienta\n");
             return;
+        }
+        for(int i = 0; i<10; i++)
+        {
+            if(clients_queue_id[i] == 0)
+            {
+                clients_queue_id[i] = client_queue_id;
+                break;
+            }
         }
         
         struct news_request news_rqst;
@@ -266,6 +282,17 @@ void init_client(int id)
     }
 }
 
+void client_new_sub(int client_queue_id)
+{   
+    struct news_request news_rqst;
+    if(msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
+    {
+        printf("Nowa subskrypcja \n");
+        update_chanel_subscribers(client_queue_id, &news_rqst);
+    }
+    return;
+}
+
 
 int main(){
     printf("######Distributor:\n");
@@ -289,6 +316,10 @@ int main(){
         init_comunicatnion(id);
         add_chanel_to_producer(id);
         init_client(id);
+        for(int i = 0; i<10; i++)
+        {
+            client_new_sub(clients_queue_id[i]);
+        }
                                                 // for(int i = 0;i<10;i++)
                                                 // {
                                                 //     printf("%d ",i+1);

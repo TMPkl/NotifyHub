@@ -66,6 +66,15 @@ void init_producer()
             else if(i == 9)
             {
                 printf("Nie ma takiego kanału, spróbuj ponownie później.\n");
+                struct news_request news_rqst;
+                news_rqst.type = NEWS_REQUEST;
+                news_rqst.id_client = my_id;
+                for (int i = 0; i < 10; i++)
+                {
+                news_rqst.chanel[i] = 0;
+                }
+                msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
+
                 return;
             }
         }
@@ -88,9 +97,37 @@ void init_producer()
 
 
 int main(){
-    printf("######Klient:\n");
 
+    printf("######Klient:\n");
     init_producer();
+    int choice;
+
+    printf("Aby zasubskryować nowy kanał wybierz 1, aby odczytać newsy wybierz 2: ");
+    while (1)
+    {   
+        printf("Aby zasubskryować nowy kanał wybierz 1, aby odczytać newsy wybierz 2: ");
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+        {
+            ///rozpisać dodawanie subskrypcji, w d jest już zrobione 
+        }
+        case 2:
+            //rozpisać odczytywanie newsów
+            break;
+        default:{
+            printf("Nieprawidłowy wybór\n");
+            break;
+        }}
+        choice = 0;
+        
+        
+    }
+    
+    
+
+    
 
 
 
