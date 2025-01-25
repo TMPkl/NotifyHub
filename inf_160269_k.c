@@ -12,7 +12,7 @@
 
 int my_id;
 struct init_client client;
-struct news_request list_of_producers
+struct news_request list_of_producers;
 int news_queue_id;
 
 void init_producer()
