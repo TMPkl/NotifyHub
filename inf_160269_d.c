@@ -138,7 +138,7 @@ void update_chanel_subscribers(int client_queue_id, struct news_request *news_rq
 void client_new_sub(int client_queue_id)
 {   
     struct news_request news_rqst;
-    msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
+    msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT);
     
         printf("Nowa subskrypcja \n");
         update_chanel_subscribers(client_queue_id, &news_rqst);
@@ -210,7 +210,7 @@ void add_new_subs()
 {
     struct ping ping;
     struct news_request list_of_producers;
-    struct mews_request news_rqst;
+    struct news_request news_rqst;
     list_of_producers.type = NEWS_BROADCAST;
     for(int i = 0;i<10; i++)
     {
@@ -228,7 +228,7 @@ void add_new_subs()
             
             for (int j = 0; j < 10; j++)
             {
-                news_request.chanel[j] = 0;
+                news_rqst.chanel[j] = 0;
             }
             //client_new_sub(clients_queue_id[i]);
             if(msgrcv(clients_queue_id[i], &ping, sizeof(ping) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
