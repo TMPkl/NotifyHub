@@ -100,7 +100,10 @@ void init_producer()
 int main(){
 
     printf("######Klient:\n");
-    init_producer();
+    my_id = -1;
+    while(my_id == -1)
+        init_producer();
+    
     int choice;
 
     while (1)

@@ -329,6 +329,9 @@ void init_client(int id)
         return;
     }
 }
+void send_news_to_client(int client_queue_id, struct news *news_to_send){
+    msgsnd(client_queue_id, news_to_send, sizeof(news_to_send) - sizeof(long), 0);
+}
 
 
 
@@ -383,8 +386,17 @@ int main(){
                 int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
                if( a !=-1)
                {
-                printf("Otrzymano wiadomość do przekierowania: %s od %d o id %d\n", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
-                
+                //printf("Otrzymano wiadomość do przekierowania: %s od %d o id %d\n", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
+                for(int j = 0; j<10; j++)
+                {   
+                    printf("propagacja 1.\n");
+
+                    if(chanel_subcribers[i][j] != 0)
+
+                    {   printf("propagacja 2. \n");
+                        send_news_to_client(chanel_subcribers[i][j], &news_to_broadcast);
+                    }
+                }
                }
             }
         }
