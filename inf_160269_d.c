@@ -233,10 +233,10 @@ void add_new_subs()
             //client_new_sub(clients_queue_id[i]);
             if(msgrcv(clients_queue_id[i], &ping, sizeof(ping) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
             {
-                printf("pinged \n")
+                printf("pinged \n");
                 msgsnd(clients_queue_id[i], &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);   
                 printf("Wysłano ofertę kanałów\n");
-                msgrcv(clients_queue_id[i], &news_request, sizeof(news_request) - sizeof(long), NEWS_REQUEST, 0);          
+                msgrcv(clients_queue_id[i], &news_rqst, sizeof(news_request) - sizeof(long), NEWS_REQUEST, 0);          
                 printf("odebranno chec subskrybcji\n");
                 update_chanel_subscribers(clients_queue_id[i], &news_rqst);
             }
