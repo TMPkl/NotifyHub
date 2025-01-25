@@ -134,7 +134,16 @@ void update_chanel_subscribers(int client_queue_id, struct news_request *news_rq
                 }
             }
         }
-
+void client_new_sub(int client_queue_id)
+{   
+    struct news_request news_rqst;
+    if(msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
+    {
+        printf("Nowa subskrypcja \n");
+        update_chanel_subscribers(client_queue_id, &news_rqst);
+    }
+    return;
+}
 
 void init_comunicatnion(int init_queue_id){
     
@@ -311,16 +320,7 @@ void init_client(int id)
     }
 }
 
-void client_new_sub(int client_queue_id)
-{   
-    struct news_request news_rqst;
-    if(msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
-    {
-        printf("Nowa subskrypcja \n");
-        update_chanel_subscribers(client_queue_id, &news_rqst);
-    }
-    return;
-}
+
 
 
 int main(){
