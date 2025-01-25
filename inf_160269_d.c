@@ -33,6 +33,7 @@ int connected_clients_id[10] = {0}; // lista id klientów podłączonych do dyst
 int clients_queue_id[10]= {0}; // lista id kolejek klientów - maksymalnie 10 klientów
 
 struct news client_news;
+void client_new_sub(int client_queue_id); // Forward declaration
 
 
 
