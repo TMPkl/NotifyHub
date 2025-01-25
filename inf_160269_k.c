@@ -143,7 +143,7 @@ int main(){
         case 2:
             {
             struct news news_to_read;
-            bool was_news = false
+            bool was_news = false;
                 while (msgrcv(news_queue_id, &news_to_read, sizeof(news_to_read) - sizeof(long), -10, IPC_NOWAIT) > 0)
                 {
                     printf("#######Otrzymano news; tytuł:%s, treść: \n %s\n", types_of_info[news_to_read.type-1], news_to_read.news_content);
