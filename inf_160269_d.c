@@ -236,7 +236,7 @@ void add_new_subs()
                 printf("pinged \n");
                 msgsnd(clients_queue_id[i], &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);   
                 printf("Wysłano ofertę kanałów\n");
-                msgrcv(clients_queue_id[i], &news_rqst, sizeof(news_request) - sizeof(long), NEWS_REQUEST, 0);          
+                msgrcv(clients_queue_id[i], &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, 0);          
                 printf("odebranno chec subskrybcji\n");
                 update_chanel_subscribers(clients_queue_id[i], &news_rqst);
             }
