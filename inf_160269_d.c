@@ -346,6 +346,7 @@ int main(){
         init_comunicatnion(id);
         add_chanel_to_producer(id);
         init_client(id);
+        add_new_subs();
         
                                                 // for(int i = 0;i<10;i++)
                                                 // {

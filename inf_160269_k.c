@@ -116,6 +116,7 @@ int main(){
             ping.type = NEWS_REQUEST;
             ping.id_client = my_id;
             msgsnd(news_queue_id, &ping, sizeof(ping) - sizeof(long), 0);
+            printf("Wysłano zapytanie o listę kanałów\n");
             msgrcv(news_queue_id, &list_of_channels, sizeof(list_of_channels) - sizeof(long), NEWS_BROADCAST, 0);
             printf("Lista kanałów: \n");
             for(int i = 0; i<10; i++)
