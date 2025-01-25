@@ -196,6 +196,35 @@ void init_comunicatnion(int init_queue_id){
     }
 }
 
+void add_new_subs()
+{
+    struct ping ping;
+    struct news_request list_of_producers;
+    list_of_producers.type = NEWS_BROADCAST;
+    for(int i = 0;i<10; i++)
+    {
+        if(chanel_in_use[i] != 0)
+        {
+            list_of_producers.chanel[i] = 1;                
+        }
+        else
+        list_of_producers.chanel[i] = 0;
+    }
+    
+
+    for(int i = 0; i<10; i++)
+        {
+            
+            //client_new_sub(clients_queue_id[i]);
+            if(msgrcv(clients_queue_id[i], &ping, sizeof(ping) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
+            {
+                msgsnd(clients_queue_id[i], &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);             
+                client_new_sub(clients_queue_id[i]);
+            }
+        
+        }
+}
+
 void init_client(int id)
 {
     struct init_client client;
@@ -316,10 +345,7 @@ int main(){
         init_comunicatnion(id);
         add_chanel_to_producer(id);
         init_client(id);
-        for(int i = 0; i<10; i++)
-        {
-            client_new_sub(clients_queue_id[i]);
-        }
+        
                                                 // for(int i = 0;i<10;i++)
                                                 // {
                                                 //     printf("%d ",i+1);

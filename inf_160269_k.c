@@ -111,57 +111,33 @@ int main(){
         {
         case 1:
         {
-            printf("Wybierz kanał: ");
-            printf("Lista producentów: \n");
-
-        int j =1;
-       
-        for (int i = 0; i < 10; i++)
-        {
-            if(list_of_producers.chanel[i] != 0){
-                printf("%d. kanał o treści: %s\n", i+1, types_of_info[list_of_producers.chanel[i]-1]);
-                j++;
-        }
-        }
-        printf("Wybierz kanał: ");
-        printf("\n");
-        int chanel;
-        scanf("%d", &chanel);
-
-        for(int i =0; i<10; i++)
-        {
-            if(list_of_producers.chanel[i] == chanel)
+            struct news_request list_of_channels;
+            struct ping ping;
+            ping.type = NEWS_REQUEST;
+            ping.id_client = my_id;
+            msgsnd(news_queue_id, &ping, sizeof(ping) - sizeof(long), 0);
+            msgrcv(news_queue_id, &list_of_channels, sizeof(list_of_channels) - sizeof(long), NEWS_BROADCAST, 0);
+            printf("Lista kanałów: \n");
+            for(int i = 0; i<10; i++)
             {
-                printf("Wybrany kanał: %s\n", types_of_info[chanel-1]);
-                break;
-            }
-            else if(i == 9)
-            {
-                printf("Nie ma takiego kanału, spróbuj ponownie później.\n");
-                struct news_request news_rqst;
-                news_rqst.type = NEWS_REQUEST;
-                news_rqst.id_client = my_id;
-                for (int i = 0; i < 10; i++)
+                if(list_of_channels.chanel[i] != 0)
                 {
-                news_rqst.chanel[i] = 0;
+                    printf("%d. %s\n", i+1, types_of_info[list_of_channels.chanel[i]-1]);
                 }
-                msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
-
-                return;
             }
-        }
-
-        struct news_request news_rqst;
-        news_rqst.type = NEWS_REQUEST;
-        news_rqst.id_client = my_id;
-        for (int i = 0; i < 10; i++)
-        {
-            news_rqst.chanel[i] = 0;
-        }
-        news_rqst.chanel[chanel-1] = 1;
-        msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
-
-        printf("Wysłano prośbę o subskrypcję kanału.\n");
+            printf("Wybierz kanał: ");
+            int chanel;
+            scanf("%d", &chanel);
+            struct news_request news_rqst;
+            news_rqst.type = NEWS_REQUEST;
+            news_rqst.id_client = my_id;
+            for (int i = 0; i < 10; i++)
+            {
+                news_rqst.chanel[i] = 0;
+            }
+            news_rqst.chanel[chanel-1] = 1;
+            msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
+            break;
         }
         case 2:
             //rozpisać odczytywanie newsów

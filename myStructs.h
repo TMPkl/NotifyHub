@@ -18,6 +18,12 @@ struct init_client
     int id_client; //musi być unikalne, 4 cyfry
 };
 
+struct ping
+{
+    long type;
+    int id_client;
+};
+
 struct news_request
 {
     long type;
