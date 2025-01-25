@@ -390,7 +390,7 @@ int main(){
 
                     if(chanel_subcribers[i][j] != 0)
                     {   printf("propagacja 2. \n");
-                         msgsnd(chanel_subcribers[i][j], news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
+                         msgsnd(chanel_subcribers[i][j], &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
                     }
                     if(chanel_subcribers[i][j] == 0)
                     {
