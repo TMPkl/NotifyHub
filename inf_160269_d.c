@@ -206,6 +206,11 @@ void init_comunicatnion(int init_queue_id){
     }
 }
 
+void use_types_of_info() {  //bez warningów to bez warningów (:
+    (void)types_of_info;
+}
+
+
 void add_new_subs()
 {
     struct ping ping;
@@ -242,9 +247,6 @@ void add_new_subs()
             }
             
         }
-}
-void use_types_of_info() {  //bez warningów to bez warningów (:
-    (void)types_of_info;
 }
 
 void init_client(int id)
