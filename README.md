@@ -23,6 +23,7 @@ Projekt składa się z trzech głównych komponentów:
 - Możliwość dynamicznego zarządzania subskrypcjami klientów.  
 
 
+![Application Architecture](./pa.svg)
 # KOMUNIKACJA PRODUCENT - DYSTRYBUTOR
 
 Całość odbywa się na kolejce o kluczu: `INITIAL_COMUNICATION_KEY`.
