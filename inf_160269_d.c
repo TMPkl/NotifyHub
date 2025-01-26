@@ -369,18 +369,18 @@ int main(){
                                                 // printf("\n");
                                                 // for(int i = 0;i<10;i++)
                                                 // {
-                                                //     printf("%d ",chanel_in_use[i]);
+                                                //     printf("%d ",chanel_in_use[i]);      DEBUG, lista kanałów wraz z id producenta
                                                 // }
                                                 // printf("\n");
                                                 // printf("\n");
-        for(int i = 0; i<10; i++){
-            for(int j = 0; j<10; j++){
-                printf("%d ", chanel_subcribers[i][j]);
-            }
-            printf("\n");
-        }
+        // for(int i = 0; i<10; i++){
+        //     for(int j = 0; j<10; j++){   
+        //         printf("%d ", chanel_subcribers[i][j]);          DEBUG lista subskrybentów wraz z queueu_id klenta
+        //     }
+        //     printf("\n");
+        // }
 
-                                                sleep(1);
+        //                                         sleep(1);
 
         for(int i = 0; i<10; i++){        
             if(chanel_in_use[i])
@@ -391,10 +391,10 @@ int main(){
                 //printf("Otrzymano wiadomość do przekierowania: %s od %d o id %d\n", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
                 for(int j = 0; j<10; j++)
                 {   
-                    printf("propagacja 1. \n");
+                    //printf("propagacja 1. \n");
 
                     if(chanel_subcribers[i][j] != 0)
-                    {   printf("propagacja 2. \n");
+                    {   //printf("propagacja 2. \n");
                          msgsnd(chanel_subcribers[i][j], &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
                     }
                     if(chanel_subcribers[i][j] == 0)

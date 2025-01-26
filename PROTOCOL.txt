@@ -1,5 +1,41 @@
 KOMUNIKACJA PRODUCENT - DYSRBUTOR: 
 
+	całość odbywa się na kolejce o kluczu: INITIAL_COMUNICATION_KEY
+
+	struct init_msg
+
 	-inicjalizacja: inicjalizacja odbywa się poprzez wysłanie przez producenta zapytania o dostępność kanału w jakim dystrybutor chce nadawać oraz proponowanego swojego id_producenta. W odpowiedzi dostaje feedback w którym w zależnośći od statusu:
-		status -1 - kanał jest już nadawany przez inego producenta
-		status 0  - kanał i id_producenta jest wolne, zostało pomyśle przypisane do producenta zgodnie z zapytaniem 
+		
+		status -1 - kanał jest już nadawany przez inego producenta;
+		status 0  - kanał i id_producenta jest wolne, zostało pomyśle przypisane do producenta zgodnie z zapytaniem;
+		status n dla n > 0 - proponowane przed producenta id jest zajęte, przyznano pierwsze wolne id -> n jest id_producenta.
+	
+	-wybór kanału- w strukturze init_msg,  int info_type[5] przechowuje informacje o kanałach które producent chce nadawć. Wielkość ograjczona jest do 5 (założenia projektu), watość kanałów zapisywane są zgodnie z podziałem (static char* types_of_info[] w pliku inf_16029_h.h), zapisywane kolejno w tablicy od 0.
+
+DODAWANIE NOWEGO KANALU DO NADAWANIA PRODUCENT - KLIENT: 
+
+	całość odbywa się na kolejce o kluczu: INITIAL_COMUNICATION_KEY
+
+	rozpoczęcie dodawania kanału rozpoczyna się od wysłania zapytania producent->dystrybutor na kanale UPDATING_CHANEL.
+	Jeżeli kanał jest wolny, dystrybutor zapisuje skojarzenie do tablicy skojarzeń kanał--id_nadawcy.
+	dystrybutor zwraca informacje zwrotną z statusem wykonania operacji kanałem UPDATKING_CHANEL_FEEDBACK
+
+NADAWANIE WIADOMOSCI PRODUCENT - KLIENT: 
+
+	całość odbywa się na kolejce o kluczu: INITIAL_COMUNICATION_KEY:
+
+	wiadomość stworzona przez producenta przekazywana jest za pomocą struktury news
+		
+		struct news
+	{
+		long type;   
+		int id_poroducer;
+		char news_content[100];
+	};
+	
+	`long type`, określająca kanał wiadomości jest dobierana zgodnie z tablicą przypisać kanał--treść tj. static char* types_of_info[], gdzie trzeba uwzględnić offset +1 (types_of_info[0] nadawane jest na kanale 1, types_of_info[1] nadawane jest na kanale 2, itp..). Zdefiniowane jest 10 kanałów zgodnie z założeniami pojektu.
+	`int id_poroducer`, zmienna zawierająca id producent, obecnie niewykorzystywane przy przesyłaniu, może służyc dlaszej rozbudowenie w celu np obliczania który producent najwięcej nadaje.
+	`char news_content[100]` domyślny komunikat
+
+	taka struktura przesyłana jest dystrybutorowi.
+

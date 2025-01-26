@@ -6,6 +6,8 @@
 #include "inf_160269_h.h"
 #include <stdbool.h>
 #include <unistd.h>
+#include <stdlib.h>
+
 
 
 #define INITIAL_COMUNICATION_KEY 123456
@@ -110,6 +112,7 @@ int main(){
     {   
         printf("Aby zasubskryować nowy kanał wybierz 1, aby odczytać newsy wybierz 2: ");
         scanf("%d", &choice);
+        system("clear");
         switch (choice)
         {
         case 1:
@@ -119,7 +122,7 @@ int main(){
             ping.type = NEWS_REQUEST;
             ping.id_client = my_id;
             msgsnd(news_queue_id, &ping, sizeof(ping) - sizeof(long), 0);
-            printf("Wysłano zapytanie o listę kanałów\n");
+            //printf("Wysłano zapytanie o listę kanałów\n");
             msgrcv(news_queue_id, &list_of_channels, sizeof(list_of_channels) - sizeof(long), NEWS_BROADCAST, 0);
             printf("Lista kanałów: \n");
             for(int i = 0; i<10; i++)

@@ -119,6 +119,8 @@ int main(){
             printf("Wybierz akcję: \n 1. Nadaj wiadomość. [1] \n 2. Dodaj kanał do nadawania. [2] \n 3. Wyjdź [3] \n\n");
             int input_option = 0;
             scanf("%d",&input_option);
+            system("clear");
+
             switch(input_option)
             {
                 case 1:
@@ -156,7 +158,7 @@ int main(){
                    { news_to_broadcast.type = input_channel_to_broadcast;
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
-                    printf("Wiadomość została nadana, na kanale %ld. \n", news_to_broadcast.type);
+                    printf("Wiadomość została nadana\n");
                     break;}
                 }
                 case 3:

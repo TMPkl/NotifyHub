@@ -21,3 +21,25 @@ Projekt składa się z trzech głównych komponentów:
 - Mechanizm kolejek komunikatów do przesyłania wiadomości.  
 - Protokół komunikacyjny zapewniający wydajność i niezawodność.  
 - Możliwość dynamicznego zarządzania subskrypcjami klientów.  
+
+
+# PROTOCOL
+
+## KOMUNIKACJA PRODUCENT - DYSTRYBUTOR
+
+Całość odbywa się na kolejce o kluczu: `INITIAL_COMUNICATION_KEY`.
+
+### Struktura `init_msg`
+
+### Inicjalizacja
+Inicjalizacja odbywa się poprzez wysłanie przez producenta zapytania o dostępność kanału, w którym dystrybutor chce nadawać, oraz proponowanego swojego `id_producenta`. W odpowiedzi producent otrzymuje informację zwrotną, w której w zależności od statusu:
+
+- **status -1** - kanał jest już nadawany przez innego producenta.
+- **status 0** - kanał i `id_producenta` są wolne, zostały pomyślnie przypisane do producenta zgodnie z zapytaniem.
+- **status n** (dla `n > 0`) - proponowane przez producenta ID jest zajęte, przyznano pierwsze wolne ID → `n` jest nowym `id_producenta`.
+
+### Wybór kanału
+W strukturze `init_msg`, tablica `int info_type[5]` przechowuje informacje o kanałach, które producent chce nadawać. Wielkość ograniczona jest do 5 (zgodnie z założeniami projektu). Wartości kanałów zapisywane są zgodnie z podziałem:
+
+```c
+static char* types_of_info[] w pliku inf_16029_h.h
