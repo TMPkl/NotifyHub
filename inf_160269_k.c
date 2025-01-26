@@ -3,7 +3,7 @@
 #include <sys/msg.h>
 #include <stdio.h>
 #include <string.h>
-#include "myStructs.h" 
+#include "inf_160269_h.h"
 #include <stdbool.h>
 #include <unistd.h>
 
@@ -126,7 +126,7 @@ int main(){
             {
                 if(list_of_channels.chanel[i] != 0)
                 {
-                    printf("%d. %s\n", i+1, types_of_info[list_of_channels.chanel[i]-1]);
+                    printf("%d. %s\n", i+1, types_of_info[i]);
                 }
             }
             printf("Wybierz kanał: ");
@@ -150,8 +150,11 @@ int main(){
                 while (msgrcv(news_queue_id, &news_to_read, sizeof(news_to_read) - sizeof(long), -10, IPC_NOWAIT) > 0)
                 {
                     printf("#######Otrzymano news; tytuł:%s, treść: \n %s\n", types_of_info[news_to_read.type-1], news_to_read.news_content);
+                    printf("\n");
+
                     was_news = true;
                 }
+                printf("\n");
                 printf(was_news ? "Prczeczytano wszyskie newsy\n" : "Brak nowych newsów\n");
                 break;
             }

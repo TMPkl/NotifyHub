@@ -3,7 +3,7 @@
 #include <sys/msg.h>
 #include <stdio.h>
 #include <string.h>
-#include "myStructs.h"
+#include "inf_160269_h.h"
 #include <stdbool.h>
 #include <unistd.h>
 
@@ -47,7 +47,7 @@ bool is_chanel_free(int chanel){
 
 void add_producent(int id){
     for(int i = 0; i<10; i++){
-        if(!producents_connected_id[i] | id == producents_connected_id[i]){
+        if(!producents_connected_id[i] || id == producents_connected_id[i]){
             producents_connected_id[i] = id;
             return;
         }
@@ -243,9 +243,14 @@ void add_new_subs()
             
         }
 }
+void use_types_of_info() {  //bez warningów to bez warningów (:
+    (void)types_of_info;
+}
 
 void init_client(int id)
 {
+
+    
     struct init_client client;
     struct producent_distributor_feedback feedback;
     client.type = INITIAL_CLIENT_DISTRIBUTOR_CHANEL;
@@ -318,8 +323,6 @@ void init_client(int id)
         }
         msgsnd(client_queue_id, &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);
         msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, 0);
-        printf("Otrzymano zapytanie o newsy od klienta o id: %d, o kanał: %d\n", news_rqst.id_client);
-
         update_chanel_subscribers(client_queue_id, &news_rqst);
         
         return;

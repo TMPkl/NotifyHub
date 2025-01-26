@@ -3,7 +3,7 @@
 #include <sys/msg.h>
 #include <stdio.h>
 #include <string.h>
-#include "myStructs.h" 
+#include "inf_160269_h.h"
 #include <stdbool.h>
 #include <unistd.h>
 
@@ -23,13 +23,8 @@ DEBATA 9
 */
 
 /*
-TODO:
-- jest jakis błąd żę jak 2 jest już zajęto to nie mg dodać 1
-
-
 */
 
-// 
 #define INITIAL_COMUNICATION_KEY 123456
 
 struct init_msg msg;
@@ -85,7 +80,6 @@ void choose_news_type(struct init_msg *msg){
 int main(){
     
     int queue_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
-    int initial_info_type;
     int my_id;
 
     choose_news_type(&msg);
@@ -162,7 +156,7 @@ int main(){
                    { news_to_broadcast.type = input_channel_to_broadcast;
                     news_to_broadcast.id_poroducer = my_id;
                     msgsnd(queue_id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
-                    printf("Wiadomość została nadana, na kanale %d. \n", news_to_broadcast.type);
+                    printf("Wiadomość została nadana, na kanale %ld. \n", news_to_broadcast.type);
                     break;}
                 }
                 case 3:

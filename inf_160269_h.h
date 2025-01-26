@@ -1,5 +1,5 @@
-#ifndef MYSTRUCTS_H
-#define MYSTRUCTS_H
+#ifndef INF_16029_H_H
+#define INF_16029_H_H
 
 #define INITIAL_CHANEL 11
 #define UPDATING_CHANEL 12
@@ -72,4 +72,4 @@ static char* types_of_info[]={
     };
 
 
-#endif // MYSTRUCTS_H
+#endif //  INF_16029_H_H
