@@ -96,3 +96,87 @@ struct news {
 
 Tak zdefiniowana struktura jest przesyłana dystrybutorowi.
 
+KOMUNIKACJA KLIENT - DYSTRYBUTOR
+
+Całość odbywa się na kolejce o kluczu: INITIAL_COMUNICATION_KEY.
+
+Inicjalizacja klienta
+
+Proces inicjalizacji
+
+Klient wysyła zapytanie do dystrybutora, aby uzyskać swoje id_client.Zapytanie jest wysyłane w postaci struktury init_client na kanał INITIAL_CLIENT_DISTRIBUTOR_CHANEL:
+
+struct init_client {
+    long type;
+    int id_client;
+};
+
+Dystrybutor odpowiada za pomocą struktury producent_distributor_feedback:
+
+struct producent_distributor_feedback {
+    long type;
+    int status;
+};
+
+status -1: Podane ID jest nieprawidłowe – inicjalizacja nie powiodła się.
+
+status 0: Klient został pomyślnie połączony z wybranym ID.
+
+W przypadku udanej inicjalizacji tworzona jest kolejka wiadomości dla klienta na kluczu wyliczanym jako id_client * 1000.
+
+Subskrypcja kanałów informacyjnych
+
+Lista dostępnych kanałów
+
+Po nawiązaniu połączenia klient otrzymuje od dystrybutora listę dostępnych kanałów w strukturze news_request:
+
+struct news_request {
+    long type;
+    int id_client;
+    int chanel[10];
+};
+
+Tablica chanel[10] przechowuje informacje o dostępnych kanałach, gdzie 0 oznacza brak informacji, a 1 oznacza, że kanał jest aktywny.
+
+Wybór kanału
+
+Klient wyświetla listę dostępnych kanałów, korzystając z types_of_info[] do przetłumaczenia numerów kanałów na ich opisy.
+
+Po wybraniu kanału klient aktualizuje swoją subskrypcję, wysyłając strukturę news_request do dystrybutora.Wybrany kanał jest ustawiony na 1 w odpowiednim indeksie tablicy chanel[].
+
+Odbieranie wiadomości
+
+Struktura wiadomości
+
+Dystrybutor przesyła wiadomości do klienta w strukturze news:
+
+struct news {
+    long type;
+    char news_content[100];
+};
+
+long type: Numer kanału (offsetowany o +1 zgodnie z tablicą types_of_info[]).
+
+char news_content[100]: Treść wiadomości.
+
+Obsługa wiadomości
+
+Klient odbiera wiadomości z kolejki za pomocą msgrcv().
+
+Wiadomości są filtrowane na podstawie subskrybowanych kanałów.
+
+Każda wiadomość jest wyświetlana z informacją o jej kanale i treści.
+
+Dodanie nowej subskrypcji
+
+Klient wysyła zapytanie o aktualną listę kanałów, wysyłając pustą strukturę ping:
+
+struct ping {
+    long type;
+    int id_client;
+};
+
+Dystrybutor odpowiada strukturą news_request z listą dostępnych kanałów.
+
+Klient wybiera kanał i aktualizuje swoją subskrypcję, wysyłając zaktualizowaną strukturę news_request.
+
