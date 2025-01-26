@@ -1,1 +1,0 @@
-scp *.c *.h inf160269@unixlab.cs.put.poznan.pl:/home/inf160269/PWiS/projekt
