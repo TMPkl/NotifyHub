@@ -181,11 +181,8 @@ int main(){
                 }
             }
             scanf("%d", &chanel_to_delete);
-            if(chanel_to_delete <0 || chanel_to_delete > 10)
-            {
-                printf("Nieprawidłowy wybór\n");
-                break;
-            }
+
+            printf(chanel_to_delete);
             struct delete_chanel delete_rqst;
             delete_rqst.type = SUBS_DEL;
             delete_rqst.chanel_to_delete = chanel_to_delete;
