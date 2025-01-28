@@ -188,7 +188,6 @@ int main(){
             }
             struct delete_chanel delete_rqst;
             delete_rqst.type = SUBS_DEL;
-            delete_rqst.id_client = my_id;
             delete_rqst.chanel_to_delete = chanel_to_delete;
             msgsnd(news_queue_id, &delete_rqst, sizeof(delete_rqst) - sizeof(long), 0);
             subscribed_channels[chanel_to_delete-1] = 0;
