@@ -182,7 +182,7 @@ int main(){
             }
             scanf("%d", &chanel_to_delete);
 
-            printf(chanel_to_delete);
+            printf("%d",chanel_to_delete);
             struct delete_chanel delete_rqst;
             delete_rqst.type = SUBS_DEL;
             delete_rqst.chanel_to_delete = chanel_to_delete;
