@@ -180,7 +180,11 @@ int main(){
                     printf("%d. %s\n", i+1, types_of_info[i]);
                 }
             }
-            scanf("%d", &chanel_to_delete);
+            if(chanel_to_delete > 10 || chanel_to_delete < 1)
+            {
+                printf("Nieprawidłowy wybór\n");
+                break;
+            }
 
             printf("%d",chanel_to_delete);
             struct delete_chanel delete_rqst;
@@ -188,6 +192,7 @@ int main(){
             delete_rqst.chanel_to_delete = chanel_to_delete;
             msgsnd(news_queue_id, &delete_rqst, sizeof(delete_rqst) - sizeof(long), 0);
             subscribed_channels[chanel_to_delete-1] = 0;
+            break; 
         }
         default:{
             printf("Nieprawidłowy wybór\n");
