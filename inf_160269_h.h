@@ -11,6 +11,7 @@
 
 #define NEWS_REQUEST 11 //klient pyta o newsy
 #define NEWS_BROADCAST 12 //distributor wysyła liste dostepnych newsów
+#define SUBS_DEL 13 //klient chce usunąć subskrypcje
 
 struct init_client
 {
@@ -57,7 +58,11 @@ struct updating_channels{
     int new_chanel_to_broadcast;
     int status; 
 };
-
+struct delete_chanel{
+    long type;
+    int id_producent;
+    int chanel_to_delete;
+};
 static char* types_of_info[]={
     "ROZRYWKA" , //1
     "SPORT" , //2

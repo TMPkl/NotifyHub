@@ -5,7 +5,7 @@
 #include <string.h>
 #include "inf_160269_h.h"
 #include <stdbool.h>
-#include <unistd.h>
+#include <unistd.h> 
 #include <stdlib.h>
 
 
@@ -16,6 +16,7 @@ int my_id;
 struct init_client client;
 struct news_request list_of_producers;
 int news_queue_id;
+int subscribed_channels[10] = {0};
 
 void init_producer()
 {   int init_id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
@@ -91,6 +92,7 @@ void init_producer()
         }
         news_rqst.chanel[chanel-1] = 1;
         msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
+        subscribed_channels[chanel-1] = 1;
 
         return;
     }
@@ -110,7 +112,7 @@ int main(){
 
     while (1)
     {   
-        printf("Aby zasubskryować nowy kanał wybierz 1, aby odczytać newsy wybierz 2: ");
+        printf("Aby zasubskryować nowy kanał wybierz 1\n aby odczytać newsy wybierz 2\n aby zakończyć działanie wybierz 3\n aby usunąć subskrypcję wybierz 4\n");
         scanf("%d", &choice);
         system("clear");
         switch (choice)
@@ -144,6 +146,7 @@ int main(){
             }
             news_rqst.chanel[chanel-1] = 1;
             msgsnd(news_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), 0);
+            subscribed_channels[chanel-1] = 1;
             break;
         }
         case 2:
@@ -161,6 +164,35 @@ int main(){
                 printf(was_news ? "Prczeczytano wszyskie newsy\n" : "Brak nowych newsów\n");
                 break;
             }
+        case 3:
+        {
+            printf("Zakończono działanie\n");
+            return 0;
+        }
+        case 4:
+        {
+            printf("Wybierz kanał do usunięcia: \n");
+            int chanel_to_delete = -1;
+            for(int i =0;i<10;i++)
+            {
+                if(subscribed_channels[i] == 1)
+                {
+                    printf("%d. %s\n", i+1, types_of_info[i]);
+                }
+            }
+            scanf("%d", &chanel_to_delete);
+            if(chanel_to_delete <0 || chanel_to_delete > 10)
+            {
+                printf("Nieprawidłowy wybór\n");
+                break;
+            }
+            struct delete_chanel delete_rqst;
+            delete_rqst.type = SUBS_DEL;
+            delete_rqst.id_client = my_id;
+            delete_rqst.chanel_to_delete = chanel_to_delete;
+            msgsnd(news_queue_id, &delete_rqst, sizeof(delete_rqst) - sizeof(long), 0);
+            subscribed_channels[chanel_to_delete-1] = 0;
+        }
         default:{
             printf("Nieprawidłowy wybór\n");
             break;

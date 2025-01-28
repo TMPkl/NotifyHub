@@ -210,6 +210,28 @@ void use_types_of_info() {  //bez warningów to bez warningów (:
     (void)types_of_info;
 }
 
+void delete_subscribe(int client_queue_id, int chanel)
+{
+    for(int i = 0; i<10; i++)
+    {
+        if(chanel_subcribers[chanel][i] == client_queue_id)
+        {
+            chanel_subcribers[chanel][i] = 0;
+        }
+    }
+}
+
+void subs_resignation()
+{
+    struct delete_chanel delete_rqst;
+    for(int i=0; i<10;i++)
+    {       
+        if(msgrcv(clients_queue_id[i], &delete_rqst, sizeof(delete_rqst) - sizeof(long), SUBS_DEL, IPC_NOWAIT)>0)
+        {
+            delete_subscribe(clients_queue_id[i], delete_rqst.chanel_to_delete);
+        }
+    }
+}
 
 void add_new_subs()
 {
@@ -348,63 +370,41 @@ int main(){
     }
 
 
-
     int id = msgget(INITIAL_COMUNICATION_KEY, IPC_CREAT | 0644);
     struct news news_to_broadcast;
+    news_to_broadcast.type = 1231;
 
     while (1)
     {   
-        news_to_broadcast.type = 1231;
+        
         strcpy(news_to_broadcast.news_content, " "); //wyczyszczenie poprzedniej wiadomosć 
 
         init_comunicatnion(id);
         add_chanel_to_producer(id);
         init_client(id);
         add_new_subs();
-        
-                                                // for(int i = 0;i<10;i++)
-                                                // {
-                                                //     printf("%d ",i+1);
-                                                // }
-                                                // printf("\n");
-                                                // for(int i = 0;i<10;i++)
-                                                // {
-                                                //     printf("%d ",chanel_in_use[i]);      DEBUG, lista kanałów wraz z id producenta
-                                                // }
-                                                // printf("\n");
-                                                // printf("\n");
-        // for(int i = 0; i<10; i++){
-        //     for(int j = 0; j<10; j++){   
-        //         printf("%d ", chanel_subcribers[i][j]);          DEBUG lista subskrybentów wraz z queueu_id klenta
-        //     }
-        //     printf("\n");
-        // }
-
-        //                                         sleep(1);
-
+        subs_resignation();
+           
         for(int i = 0; i<10; i++){        
             if(chanel_in_use[i])
             {
                 int a = msgrcv(id, &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), i+1, IPC_NOWAIT);
-               if( a !=-1)
-               {
-                //printf("Otrzymano wiadomość do przekierowania: %s od %d o id %d\n", news_to_broadcast.news_content, news_to_broadcast.type, news_to_broadcast.id_poroducer);
-                for(int j = 0; j<10; j++)
-                {   
-                    //printf("propagacja 1. \n");
+                if( a !=-1)
+                {
+                    for(int j = 0; j<10; j++)
+                    {   
 
-                    if(chanel_subcribers[i][j] != 0)
-                    {   //printf("propagacja 2. \n");
-                         msgsnd(chanel_subcribers[i][j], &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
-                    }
-                    if(chanel_subcribers[i][j] == 0)
-                    {
-                        break;
+                        if(chanel_subcribers[i][j] != 0)
+                        {   
+                            msgsnd(chanel_subcribers[i][j], &news_to_broadcast, sizeof(news_to_broadcast) - sizeof(long), 0);
+                        }
+                        if(chanel_subcribers[i][j] == 0)
+                        {
+                            break;
+                        }
                     }
                 }
-               }
             }
         }
     }
-    //msgctl(id, IPC_RMID, NULL);
 }
