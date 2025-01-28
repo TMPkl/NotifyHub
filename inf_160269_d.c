@@ -85,7 +85,6 @@ void add_chanel_to_producer(int updating_chanell_id){
 
     if(rcv_status == -1)
         return;
-    printf("debug1\n");
     
     struct updating_channels feedback;
 
@@ -101,7 +100,6 @@ void add_chanel_to_producer(int updating_chanell_id){
         
         return;
     }
-    printf("debug1\n");
     if(chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] == 0)
     {
         chanel_in_use[rqst_to_add_chanel.new_chanel_to_broadcast-1] = rqst_to_add_chanel.id_producent;
@@ -139,7 +137,7 @@ void client_new_sub(int client_queue_id)
     struct news_request news_rqst;
     msgrcv(client_queue_id, &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT);
     
-        printf("Nowa subskrypcja \n");
+        //printf("Nowa subskrypcja \n");
         update_chanel_subscribers(client_queue_id, &news_rqst);
     
     return;
@@ -151,7 +149,7 @@ void init_comunicatnion(int init_queue_id){
     struct producent_distributor_feedback feedback;
     if (msgrcv(init_queue_id, &msg, sizeof(msg) - sizeof(long), INITIAL_CHANEL, IPC_NOWAIT)>0)
     { 
-        printf("Otrzymano wiadomość, wysylanie feedback\n");  
+        //printf("Otrzymano wiadomość, wysylanie feedback\n");  
 
         //printf("kanał którym ma byc nadawane: %d\n", prod_info.pro_id);
         //printf("Typ nadawanych wiadomości: %d\n", prod_info.info_type[0]);
@@ -160,7 +158,7 @@ void init_comunicatnion(int init_queue_id){
                                                                     //printf("Id jest wolne\n");
             if(is_chanel_free(msg.info_type[0]))
             {
-                                                                    printf("Kanał i id jest wolne  ");
+                                                                    //printf("Kanał i id jest wolne  ");
                 chanel_in_use[msg.info_type[0]-1] = msg.id_producent;
                 add_producent(msg.id_producent);
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
@@ -170,7 +168,7 @@ void init_comunicatnion(int init_queue_id){
             }
             else
             {   
-                                                                    printf("Kanał jest zajęty  ");
+                                                                   //printf("Kanał jest zajęty  ");
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                 feedback.status = -1;
                 msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
@@ -182,7 +180,7 @@ void init_comunicatnion(int init_queue_id){
         else
         { 
             if(is_chanel_free(msg.info_type[0]))
-                {                                                      printf("Id jest zajęte\n");
+                {                                                      //printf("Id jest zajęte\n");
                     feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                     feedback.status = find_free_id();
                     chanel_in_use[msg.info_type[0]-1] = feedback.status;
@@ -194,7 +192,7 @@ void init_comunicatnion(int init_queue_id){
                 }
             else
             {   
-                                                                    printf("Kanał i id jest zajęte  ");
+                                                                    //printf("Kanał i id jest zajęte  ");
                 feedback.type = PRODUCENT_DISTRIBUTOR_FEEDBACK;
                 feedback.status = -1;
                 msgsnd(init_queue_id, &feedback, sizeof(feedback) - sizeof(long), 0);
@@ -259,11 +257,11 @@ void add_new_subs()
             //client_new_sub(clients_queue_id[i]);
             if(msgrcv(clients_queue_id[i], &ping, sizeof(ping) - sizeof(long), NEWS_REQUEST, IPC_NOWAIT)>0)
             {
-                printf("pinged \n");
+                //printf("pinged \n");
                 msgsnd(clients_queue_id[i], &list_of_producers, sizeof(list_of_producers) - sizeof(long), 0);   
-                printf("Wysłano ofertę kanałów\n");
+                //printf("Wysłano ofertę kanałów\n");
                 msgrcv(clients_queue_id[i], &news_rqst, sizeof(news_rqst) - sizeof(long), NEWS_REQUEST, 0);          
-                printf("odebranno chec subskrybcji\n");
+                //printf("odebranno chec subskrybcji\n");
                 update_chanel_subscribers(clients_queue_id[i], &news_rqst);
             }
             
@@ -281,7 +279,7 @@ void init_client(int id)
 
     if (msgrcv(id, &client, sizeof(client) - sizeof(long), INITIAL_CLIENT_DISTRIBUTOR_CHANEL, IPC_NOWAIT)>0)
     { 
-        printf("Otrzymano wiadomość o checi uzyskania ip przez klienta, wysylanie feedback\n");
+        //printf("Otrzymano wiadomość o checi uzyskania ip przez klienta, wysylanie feedback\n");
         if (client.id_client <0 || client.id_client > 999)
         {
             feedback.status = -1;
@@ -314,7 +312,7 @@ void init_client(int id)
         int client_queue_id = msgget(key, IPC_CREAT | 0644);
         if(client_queue_id == -1)
         {
-            printf("Nie udało się utworzyć kolejki dla klienta\n");
+           // printf("Nie udało się utworzyć kolejki dla klienta\n");
             return;
         }
         for(int i = 0; i<10; i++)
