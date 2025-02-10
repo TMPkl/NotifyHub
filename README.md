@@ -1,5 +1,7 @@
 # NotifyHub
 
+*Tak, wiem, ten kod to trochę spaghetti, ale gdy deadline się zbliża, ważniejsze jest działanie niż elegancja. <:*
+
 ## Opis projektu
 NotifyHub to system przekazywania powiadomień, który umożliwia komunikację między producentami powiadomień, centralnym dyspozytorem oraz klientami subskrybującymi określone typy powiadomień. Głównym celem systemu jest efektywne rozgłaszanie wiadomości w oparciu o mechanizm kolejek komunikatów.
 
